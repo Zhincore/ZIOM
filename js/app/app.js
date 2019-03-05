@@ -4,6 +4,7 @@ const App = {
     //
     models: "maps/",
     libs: [
+        "js/modules/libs/stats.min.js",
         "js/modules/loaders/GLTFLoader.js",
         "js/modules/controls/OrbitControls.js",
         "js/modules/shaders/SSAOShader.js",
@@ -29,6 +30,7 @@ const App = {
     render: null,
     ssaoPass: null,
     effectComposer: null,
+    overLayer: null,
     loader: null,
     loadedLibs: [],
     
@@ -49,10 +51,6 @@ const App = {
             // Init scene
             this.scene = new THREE.Scene();
             this.scene.background = new THREE.Color(0xeaeaea);
-            
-            
-            // Init default camera
-            this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.3, 100);
 
 
             // Init renderer
@@ -60,12 +58,31 @@ const App = {
             this.renderer.setSize(window.innerWidth, window.innerHeight);
             this.renderer.gammaInput = true;
 			this.renderer.gammaOutput = true;
-			this.renderer.shadowMapEnabled = true;
-                
-                        
+			this.renderer.shadowMap.enabled = true;
+			
+			
+			// Init stats
+			this.stats = new Stats();
+            this.stats.showPanel( 0 );
+            document.body.appendChild( this.stats.dom );
+			
+			
+			// Init default camera
+            this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.3, 75);
+               
+            // Prepare layers    
+            this.overLayer = new Layer( this.camera );
+            this.overLayer.scene.add( new THREE.AmbientLight( 0xFFFFFF ) );
+            
+               
             // Init controls
             this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
             this.controls.maxPolarAngle = Math.PI / 2;
+            this.controls.enableDamping = true;
+            this.controls.dampingFactor = 1.5;
+            this.controls.minDistance = 10;
+            this.controls.maxDistance = 50;
+            
             this.camera.position.set(0, 2, 15);
             this.controls.update();
             
@@ -77,15 +94,20 @@ const App = {
         });
         
         $(document).on("ZIOM-modelReady", () => {
+            this.scene.add( new THREE.DirectionalLight() );
+			this.scene.add( new THREE.HemisphereLight(0.5) );
+        
             // Add postprocessing
             this.ssaoPass = new THREE.SSAOPass( this.scene, this.camera, window.innerWidth, window.innerHeight );
-			this.ssaoPass.kernelRadius = 16;
-			this.ssaoPass.minDistance = 0.005;
-			this.ssaoPass.maxDistance = 0.1;
+			this.ssaoPass.kernelRadius = 0.5;
+			this.ssaoPass.minDistance = 0.001;
+			this.ssaoPass.maxDistance = 0.016;
 			this.ssaoPass.renderToScreen = true;
 			
-			this.effectComposer = new THREE.EffectComposer( this.renderer );
-			this.effectComposer.addPass( this.ssaoPass )
+			this.composer = new THREE.EffectComposer( this.renderer );
+			this.composer.addPass( this.ssaoPass );
+			
+            this.composer.addPass( this.overLayer.renderPass );
             
             this.render();
         });
@@ -134,11 +156,17 @@ const App = {
     //
     render: function(){
         requestAnimationFrame(this.render.bind(this));
-
-        this.effectComposer.render();
-        //this.controls.update();
+        
+        this.stats.begin();
+        
+        this.controls.update();
+        
         
         this.renderer.render(this.scene, this.camera);
+        
+        this.composer.render();
+        
+        this.stats.end();
     },
     
 }
@@ -153,6 +181,21 @@ function onWindowResize() {
 	App.ssaoPass.setSize( width, height );
 }
 
+//
+// LAYER
+//
+class Layer {
+	
+	constructor( camera ) {
+    
+		this.scene = new THREE.Scene();
+		
+		this.renderPass = new THREE.RenderPass( this.scene, camera );
+		this.renderPass.clear = false;
+		this.renderPass.clearDepth = true;
+		this.renderPass.renderToScreen = true;
+	}
+}
 
 $(window).on("load", () => {
     App.init();
