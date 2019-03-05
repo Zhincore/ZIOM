@@ -2,23 +2,23 @@
     "waypoints": {
         "waypoint-1": {
             "name":"gym",
-            "color":"#ffa300"
+            "color":"#0e4cbe"
         },
         "waypoint-2": {
             "name":"hall",
-            "color":"#ff8077"
+            "color":"#0ed61b"
         },
         "waypoint-4": {
             "name":"eatery",
-            "color":"#ff6fa3"
+            "color":"#c121be"
         },
         "waypoint-5": {
             "name":"canteen",
-            "color":"#9b6fc1"
+            "color":"#ff901b"
         },
         "waypoint-6": {
             "name":"study",
-            "color":"#549503"
+            "color":"#62e7ff"
         },
         "waypoint-9": {
             "name":"stairway",
@@ -26,11 +26,11 @@
         },
         "waypoint-11": {
             "name":"siphon",
-            "color":"#009595"
+            "color":"#138892"
         },
         "waypoint-14": {
             "name":"library",
-            "color":"#a36200"
+            "color":"#ff0000"
         }
     },
     "floors": {
