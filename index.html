@@ -54,6 +54,7 @@
             });
         });
         
+        
         $(document).one("ZIOM-initialized", () => {
             console.log("Initialization complete.");
             
@@ -62,10 +63,38 @@
             });
         });
         
-        $(document).on("ZIOM-libLoaded", (info) => {
         
-        })
-        $("#loadingBar-wrap .text");
+        $(document).on("ZIOM-libLoaded", (ev, info) => {
+            console.log("Loaded "+info[0]);
+            $("#loadingBar-wrap .text").text(info[0]+" | "+info[1]+"/"+(info[2]+info[1]));
+            
+            let percent = ((info[1] / (info[1] + info[2])) * 100);
+            
+            $("#loadingBar-progress").animate({
+                width: percent + "%"
+            }, 10).text(Math.round(percent) + "%");
+        });
+        
+        
+        $(document).one("ZIOM-libsReady", () => {
+            App.loadModel("sspbrno");
+        });
+        
+        
+        $(document).one("ZIOM-modelInit", (ev, name, color) => {
+            console.log("Loading "+name);
+            $("#loadingBar-wrap .text").text("model");
+
+            $("#loadingBar-progress").finish().width("100%").css("background-color", color).addClass("pulsing").text(name);
+            
+            App.model.load();
+        });
+        
+        
+        $(document).one("ZIOM-modelReady", () => {
+            $("#initScreen").delay(500).fadeOut();
+        });
+        
     </script>
     
     <!-- templates -->

@@ -7,8 +7,8 @@ const Model = {
         this.path = path;
         $.getJSON(path+"/config.json", (data) => {
             this.config = data;
-        
-            this.load();
+            
+            $(document).trigger("ZIOM-modelInit", [this.config.name, this.config.color]);
         });
     },
     

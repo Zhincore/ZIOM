@@ -33,6 +33,7 @@ const App = {
     overLayer: null,
     loader: null,
     loadedLibs: [],
+    model: null,
     
     
     //
@@ -117,9 +118,9 @@ const App = {
     
     //
     loadLibs: function(){
-        let lib = this.libs.shift()
+        let lib = this.libs.shift();
         $.getScript(lib, () => {
-            console.log("Loaded "+lib);
+            $(document).trigger("ZIOM-libLoaded", [[lib, this.loadedLibs.length, this.libs.length]]);
             this.loadedLibs.push(lib);
             
             if(this.libs.length === 0){
@@ -150,7 +151,8 @@ const App = {
     loadModel: function(mName){
         const path = this.models+mName;
         $.getScript(path+"/start.js", () => {
-            Model.init(path);
+            this.model = Model;
+            this.model.init(path);
         });
     },
     

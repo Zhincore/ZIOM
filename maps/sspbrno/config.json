@@ -1,4 +1,6 @@
 {
+    "name": "sspbrno",
+    "color": "#14a25f",
     "waypoints": {
         "waypoint-1": {
             "name":"gym",

@@ -66,6 +66,7 @@ body{
 
 #initScreen{
     background-color: white;
+    pointer-events: all;
 }
 
 #logo{
@@ -90,6 +91,17 @@ body{
     background-color: #ff8000;
     color: white;
     font-weight: bold;
+    transition: background-color .5s;
 }
 
+#loadingBar-progress.pulsing{
+    animation-name: pulsing;
+    animation-direction: alternate-reverse;
+    animation-iteration-count: infinite;
+    animation-duration: 0.5s; 
+}
+
+@keyframes pulsing{
+    to{background-color: transparent}
+}
 
