@@ -16,7 +16,11 @@ const App = {
         "js/modules/shaders/CopyShader.js",
         "js/modules/SimplexNoise.js",
         
+        "js/modules/renderers/Projector.js",
+        
     ],
+    
+    menuTemplate: "<li><button class='menu-item trn' style='border-color: $3$aa' data-name='$1$' data-trn='$2$'>waypoint</button></li>",
     
     //
     // VARIABLES
@@ -28,6 +32,7 @@ const App = {
     camera: null,
     controls: null,
     render: null,
+    projector: null,
     ssaoPass: null,
     effectComposer: null,
     overLayer: null,
@@ -35,6 +40,11 @@ const App = {
     loadedLibs: [],
     model: null,
     
+    mouse: {
+        x: 0,
+        y: 0
+    },
+    INTERSECTED: null,
     
     //
     // INIT
@@ -47,6 +57,7 @@ const App = {
 
         // Load libs
         //this.loadLibs();
+        this.registerListeners();
         $(document).trigger("ZIOM-initialized");
     
         $(document).one("ZIOM-libsReady", () => {
@@ -88,6 +99,9 @@ const App = {
             this.camera.position.set(0, 2, 15);
             this.controls.update();
             
+            // init object to perform world/screen calculations
+            this.projector = new THREE.Projector();
+            
             
             // Init loader
             this.loader = new THREE.GLTFLoader();
@@ -96,8 +110,10 @@ const App = {
         });
         
         $(document).one("ZIOM-modelReady", () => {
+            this.prepareMenus();
+        
             this.scene.add( new THREE.DirectionalLight() );
-			  this.scene.add( new THREE.HemisphereLight(0.5) );
+			this.scene.add( new THREE.HemisphereLight(0.5) );
         
             // Add postprocessing
             this.ssaoPass = new THREE.SSAOPass( this.scene, this.camera, window.innerWidth, window.innerHeight );
@@ -111,7 +127,7 @@ const App = {
 			
             this.composer.addPass( this.overLayer.renderPass );
             
-            this.render();
+            this.animate();
         });
         
     },
@@ -135,14 +151,15 @@ const App = {
     },
     
     //
-    registerListeners: function(){
-        const canvas = this.canvas;
-        const renderer = this.renderer;
-        const camera = this.camera;
-        
-        window.addEventListener( 'resize', onWindowResize, false );
-		onWindowResize();
+    registerListeners: function(){       
+        $(window).resize((this.onResize).bind(this)); 
+        $(document).mousemove((this.onMouseMove).bind(this));   
+    },
     
+    //
+    prepareMenus: function(){
+        $("#nav .menu").html(config2menu(configSort(this.model.config.waypoints)));
+        $("#nav .trn").translate();
     },
     
     //
@@ -155,35 +172,84 @@ const App = {
             this.model.init(path);
         });
     },
+        
+    //
+    // EVENTS
+    //
+    onResize: function(){
+        var width = window.innerWidth;
+	    var height = window.innerHeight;
+	    this.camera.aspect = width / height;
+	    this.camera.updateProjectionMatrix();
+	    this.renderer.setSize( width, height );
+	    this.ssaoPass.setSize( width, height );
+    },
+    
+    //
+    onMouseMove: function(event){
+        this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    },
+    
     
     //
     // RENDER
     //
-    render: function(){
-        requestAnimationFrame(this.render.bind(this));
-        
+    animate: function(){
+        requestAnimationFrame(this.animate.bind(this));
         this.stats.begin();
-        
-        this.controls.update();
-        
-        
-        this.renderer.render(this.scene, this.camera);
-        
-        this.composer.render();
-        
+        this.render();
+        this.update();
         this.stats.end();
     },
     
-}
+    update: function(){
+        let vector = new THREE.Vector3(this.mouse.x, this.mouse.y, 1);
+        vector.unproject(this.camera);
+        let ray = new THREE.Raycaster(this.camera.position, vector.sub(this.camera.position).normalize());
 
+        // create an array containing all objects in the scene with which the ray intersects
+        let intersects = ray.intersectObjects(this.overLayer.scene.children);
 
-function onWindowResize() {
-	var width = window.innerWidth;
-	var height = window.innerHeight;
-	App.camera.aspect = width / height;
-	App.camera.updateProjectionMatrix();
-	App.renderer.setSize( width, height );
-	App.ssaoPass.setSize( width, height );
+        // INTERSECTED = the object in the scene currently closest to the camera 
+        //		and intersected by the Ray projected from the mouse position 	
+
+        // if there is one (or more) intersections
+        if (intersects.length > 0) {
+            // if the closest object intersected is not the currently stored intersection object
+            if (intersects[0].object != this.INTERSECTED) {
+                // restore previous intersection object (if it exists) to its original color
+                if (this.INTERSECTED){
+                    this.INTERSECTED.material.opacity = this.INTERSECTED.origOpacity;
+                }
+                if(intersects[0].object.name.startsWith("waypoint")){
+                    // store reference to closest object as current intersection object
+                    this.INTERSECTED = intersects[0].object;
+                    // store color of closest object (for later restoration)
+                    this.INTERSECTED.origOpacity = this.INTERSECTED.material.opacity;
+                    // set a new color for closest object
+                    this.INTERSECTED.material.opacity = 0.5;
+                }
+            }
+        } else { // there are no intersections
+            // restore previous intersection object (if it exists) to its original color
+            if (this.INTERSECTED){
+                this.INTERSECTED.material.opacity = this.INTERSECTED.origOpacity;
+            }
+            // remove previous intersection object reference
+            //     by setting current intersection object to "nothing"
+            this.INTERSECTED = null;
+        }
+    
+        this.controls.update();
+    },
+    
+    render: function(){        
+        this.renderer.render(this.scene, this.camera);
+        
+        this.composer.render();
+    },
+    
 }
 
 //
@@ -201,3 +267,49 @@ class Layer {
 		this.renderPass.renderToScreen = true;
 	}
 }
+
+//
+// FUNCTIONS
+//
+function config2menu(object){
+    let output = "";
+    
+    for (let key in object) {
+        // skip loop if the property is from prototype
+        if (!object.hasOwnProperty(key)) continue;
+        
+        let obj = object[key];
+        let template = App.menuTemplate;
+        
+        output += template.replace("$1$", key).replace("$2$", obj.name).replace("$3$", obj.color);
+    }
+    
+    return output;
+}
+
+function configCompare(a,b) {
+  if (a[1].name < b[1].name)
+    return -1;
+  if (a[1].name > b[1].name)
+    return 1;
+  return 0;
+}
+
+function configSort(object){
+    let sortable = [];
+    let sorted = {};
+    
+    for (let key in object) {
+        sortable.push([key, object[key]]);
+    }
+    
+    sortable.sort(configCompare);
+    
+    sortable.forEach((el) => {
+        sorted[el[0]] = el[1];
+    });
+    
+    return sorted;
+}
+
+

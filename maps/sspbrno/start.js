@@ -5,10 +5,16 @@ const Model = {
     
     init: function(path){
         this.path = path;
+        // Load config
         $.getJSON(path+"/config.json", (data) => {
             this.config = data;
             
-            $(document).trigger("ZIOM-modelInit", [this.config.name, this.config.color]);
+            // Load translations
+            $.getJSON(path+"/translate.json", (data) => {
+                Object.assign($.dict, data);
+            
+                $(document).trigger("ZIOM-modelInit", [this.config.name, this.config.color]);
+            });
         });
     },
     
@@ -37,6 +43,9 @@ const Model = {
                     
                     this.waypoints.push(obj);
                     
+                }else if(obj.name.startsWith("Arrow")){
+                    obj.material.color.set(0x00ff00);
+                       
                 }else{
                     obj.material.opacity = 0.95;
                     obj.material.transparent = true;

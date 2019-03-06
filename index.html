@@ -13,7 +13,10 @@
         
         <div id="initScreen" class="fulllay">
             <noscript>
-                Javascript is disabled.
+                <pre>
+EN: Javascript is disabled.
+CZ: Máte vypnutý Javascript.
+                </pre>
             </noscript>
             
             
@@ -28,13 +31,23 @@
             </div>
         </div>
         
-        <div id="stats" class="fulllay" style="display: none"></div>
+        <div id="controls" class="fulllay runtimeui" style="display: none">
+            <div id="nav">
+                <ul class="menu">
+                    <li><button class="menu-item">0. Patro</button></li>
+                    <li><button class="menu-item">1. Patro</button></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="stats" class="fulllay runtimeui" style="display: none"></div>
     </div>
     
     <canvas id="canvas"></canvas>
     
     <!-- js -->
     <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/translation.js"></script>
     <script src="js/three.min.js"></script>
     <script src="js/app/app.js"></script>
     
@@ -93,6 +106,7 @@
         
         $(document).one("ZIOM-modelReady", () => {
             $("#initScreen").delay(500).fadeOut();
+            $(".runtimeui").fadeIn();
         });
         
     </script>

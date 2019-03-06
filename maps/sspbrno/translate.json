@@ -1,0 +1,34 @@
+{
+    "gym":{
+        "en": "Gym",
+        "cs": "Tělocvična"
+    },
+    "hall":{
+        "en": "Hall",
+        "cs": "Hala"
+    },
+    "eatery":{
+        "en": "Eatery",
+        "cs": "Jídelna"
+    },
+    "canteen":{
+        "en": "Canteen",
+        "cs": "Kantýna"
+    },
+    "study":{
+        "en": "Study",
+        "cs": "Studovna"
+    },
+    "stairway":{
+        "en": "Main stairway",
+        "cs": "Hlavní schodiště"
+    },
+    "siphon":{
+        "en": "Siphon",
+        "cs": "Sifón"
+    },
+    "library":{
+        "en": "Library",
+        "cs": "Knihovna"
+    }
+}
