@@ -95,7 +95,7 @@ const App = {
         
         $(document).on("ZIOM-modelReady", () => {
             this.scene.add( new THREE.DirectionalLight() );
-			this.scene.add( new THREE.HemisphereLight(0.5) );
+			  this.scene.add( new THREE.HemisphereLight(0.5) );
         
             // Add postprocessing
             this.ssaoPass = new THREE.SSAOPass( this.scene, this.camera, window.innerWidth, window.innerHeight );
@@ -116,16 +116,18 @@ const App = {
     
     //
     loadLibs: function(){
-        this.libs.forEach((lib) => {
-            $.getScript(lib, () => {
-                console.log("Loaded "+lib);
-                this.loadedLibs.push(lib);
-                
-                if(this.libs.length === this.loadedLibs.length){
-                    // Start the loop
-                    $(document).trigger("ZIOM-libsReady");
-                }
-            });
+        let lib = this.libs.shift()
+        $.getScript(lib, () => {
+            console.log("Loaded "+lib);
+            this.loadedLibs.push(lib);
+            
+            if(this.libs.length === 0){
+                // Exit loading loop
+                $(document).trigger("ZIOM-libsReady");
+            }else{
+                // Continue loading loop
+                this.loadLibs().bind(this);
+            }
         });
         
     },
