@@ -1,5 +1,10 @@
 (function ( $ ) {
-    $.dict = {};
+    $.dict = {
+        "everyting": {
+            "en":"Everything",
+            "cs":"Vše"
+        }
+    };
     
     // $(selector).translate(lang)
     $.fn.translate = function(lang) {

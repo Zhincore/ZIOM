@@ -6,7 +6,7 @@ const App = {
     libs: [
         "js/modules/libs/stats.min.js",
         "js/modules/loaders/GLTFLoader.js",
-        "js/modules/controls/OrbitControls.js",
+        "js/modules/controls/OrbitControls.modified.js",
         "js/modules/shaders/SSAOShader.js",
 
         "js/modules/postprocessing/EffectComposer.js",
@@ -20,7 +20,7 @@ const App = {
         
     ],
     
-    menuTemplate: "<li><button class='menu-item trn' style='border-color: $3$aa' data-name='$1$' data-trn='$2$'>waypoint</button></li>",
+    menuTemplate: "<li><button class='menu-item trn nav-item' style='border-color: $3$aa' data-name='$1$' data-trn='$2$'>waypoint</button></li>",
     
     //
     // VARIABLES
@@ -93,11 +93,14 @@ const App = {
             this.controls.maxPolarAngle = Math.PI / 2;
             this.controls.enableDamping = true;
             this.controls.dampingFactor = 1.5;
-            this.controls.minDistance = 10;
+            this.controls.minDistance = 5;
             this.controls.maxDistance = 50;
+            this.controls.enableKeys = false;
+            this.controls.autoRotate = false;
             
             this.camera.position.set(0, 2, 15);
             this.controls.update();
+            this.controls.saveState();
             
             // init object to perform world/screen calculations
             this.projector = new THREE.Projector();
@@ -158,8 +161,25 @@ const App = {
     
     //
     prepareMenus: function(){
-        $("#nav .menu").html(config2menu(configSort(this.model.config.waypoints)));
+        $("#nav .menu").append($.parseHTML(config2menu(configSort(this.model.config.waypoints))));
         $("#nav .trn").translate();
+        
+        $(".nav-item").click((ev) => {
+            let target = $(ev.target).attr("data-name");
+            
+            this.controls.reset();
+            if(target == "all"){
+                this.controls.autoRotate = false;
+                
+            }else{
+                this.controls.dIn(5);
+                this.controls.autoRotate = true;
+                let pos = new THREE.Vector3(0, 0, 0);
+                this.overLayer.scene.getObjectByName(target).getWorldPosition(pos);
+                
+                this.controls.target = pos;
+            }
+        });
     },
     
     //
