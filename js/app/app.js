@@ -45,9 +45,10 @@ const App = {
         }
 
         // Load libs
-        this.loadLibs();
+        //this.loadLibs();
+        $(document).trigger("ZIOM-initialized");
     
-        $(document).on("ZIOM-libsReady", () => {
+        $(document).one("ZIOM-libsReady", () => {
             // Init scene
             this.scene = new THREE.Scene();
             this.scene.background = new THREE.Color(0xeaeaea);
@@ -64,7 +65,7 @@ const App = {
 			// Init stats
 			this.stats = new Stats();
             this.stats.showPanel( 0 );
-            document.body.appendChild( this.stats.dom );
+            $("#stats").append( this.stats.dom );
 			
 			
 			// Init default camera
@@ -90,10 +91,10 @@ const App = {
             // Init loader
             this.loader = new THREE.GLTFLoader();
             
-            this.loadModel("sspbrno");
+            //this.loadModel("sspbrno");
         });
         
-        $(document).on("ZIOM-modelReady", () => {
+        $(document).one("ZIOM-modelReady", () => {
             this.scene.add( new THREE.DirectionalLight() );
 			this.scene.add( new THREE.HemisphereLight(0.5) );
         
@@ -196,7 +197,3 @@ class Layer {
 		this.renderPass.renderToScreen = true;
 	}
 }
-
-$(window).on("load", () => {
-    App.init();
-});

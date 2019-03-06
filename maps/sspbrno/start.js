@@ -32,7 +32,7 @@ const Model = {
                     obj.material.visible = true;
                     obj.material.color.set(new THREE.Color( this.config.waypoints[obj.name].color ));
                     obj.material.flatShading = true;
-                    obj.material.opacity = 0.5;
+                    obj.material.opacity = 0.3;
                     obj.material.transparent = true;
                     
                     this.waypoints.push(obj);

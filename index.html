@@ -8,11 +8,74 @@
     </head>
     <body>
     
+    <div id="overlay">
+        <div id="alerts"></div>
+        
+        <div id="initScreen" class="fulllay">
+            <noscript>
+                Javascript is disabled.
+            </noscript>
+            
+            
+            <img id="logo" src="images/ZIOM.png" style="display: none">
+            
+            <div id="loadingBar-wrap" style="display: none;">
+                Loading...
+                <div class="text"></div>
+                <div id="loadingBar">
+                    <div id="loadingBar-progress" style="width: 0%;">0%</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="stats" class="fulllay" style="display: none"></div>
+    </div>
+    
     <canvas id="canvas"></canvas>
     
+    <!-- js -->
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/three.min.js"></script>
     <script src="js/app/app.js"></script>
+    
+    <script>
+        $(window).on("load", () => {
+            $("#logo").delay(100).fadeIn("fast", () => {
+                try{
+                
+                    App.init();
+                    
+                }catch(error){
+                
+                    console.error(error);
+                    $("#alerts").append($("#TEMPLATES > .alert-error").clone().hide().text("Initialization failed: "+error).delay(1).slideDown());
+                    
+                }
+            });
+        });
+        
+        $(document).one("ZIOM-initialized", () => {
+            console.log("Initialization complete.");
+            
+            $("#loadingBar-wrap").slideDown("fast", () => {
+                App.loadLibs();
+            });
+        });
+        
+        $(document).on("ZIOM-libLoaded", (info) => {
+        
+        })
+        $("#loadingBar-wrap .text");
+    </script>
+    
+    <!-- templates -->
+    <div id="TEMPLATES" style="display: none">
+    
+        <div class="alert-error alert">
+            <div class="text"></div>
+        </div>
+        
+    </div>
     
     </body>
 </html>
