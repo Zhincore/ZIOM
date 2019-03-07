@@ -84,6 +84,7 @@ THREE.OrbitControls = function ( object, domElement ) {
     
     this.dIn = dollyIn;
     this.dOut = dollyOut;
+    this.lastZoomscale = 1;
     
 	//
 	// public methods
@@ -385,6 +386,8 @@ THREE.OrbitControls = function ( object, domElement ) {
 	}();
 
 	function dollyIn( dollyScale ) {
+        
+        this.lastZoomscale = dollyScale;
 
 		if ( scope.object.isPerspectiveCamera ) {
 
@@ -406,6 +409,8 @@ THREE.OrbitControls = function ( object, domElement ) {
 	}
 
 	function dollyOut( dollyScale ) {
+    
+        this.lastZoomscale = -dollyScale;
 
 		if ( scope.object.isPerspectiveCamera ) {
 

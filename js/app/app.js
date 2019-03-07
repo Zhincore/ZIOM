@@ -44,6 +44,7 @@ const App = {
         x: 0,
         y: 0
     },
+    target: {vector:new THREE.Vector3(0, 0, 0), zoom:0},
     INTERSECTED: null,
     
     //
@@ -166,18 +167,18 @@ const App = {
         
         $(".nav-item").click((ev) => {
             let target = $(ev.target).attr("data-name");
+            let pos = new THREE.Vector3(0, 0, 0);
             
-            this.controls.reset();
             if(target == "all"){
                 this.controls.autoRotate = false;
+                this.target.vector = pos;
+                this.target.zoom = -5;
                 
             }else{
-                this.controls.dIn(5);
-                //this.controls.autoRotate = true;
-                let pos = new THREE.Vector3(0, 0, 0);
                 this.overLayer.scene.getObjectByName(target).getWorldPosition(pos);
                 
-                this.controls.target = pos;
+                this.target.vector = pos;
+                this.target.zoom = 5;
             }
         });
     },
@@ -261,6 +262,12 @@ const App = {
             this.INTERSECTED = null;
         }
     
+        this.controls.target = this.target.vector;
+        if(this.target.zoom > 0){
+            this.controls.dIn(this.target.zoom);
+        }else if(this.target.zoom > 0){
+            this.controls.dOut(-this.target.zoom)
+        }
         this.controls.update();
     },
     
