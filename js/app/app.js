@@ -173,7 +173,7 @@ const App = {
                 
             }else{
                 this.controls.dIn(5);
-                this.controls.autoRotate = true;
+                //this.controls.autoRotate = true;
                 let pos = new THREE.Vector3(0, 0, 0);
                 this.overLayer.scene.getObjectByName(target).getWorldPosition(pos);
                 
