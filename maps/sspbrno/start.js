@@ -19,7 +19,7 @@ const Model = {
     },
     
     load: function(){
-        App.loader.load(this.path+"/model.glb", ((gltf) => {            
+        App.loader.load(this.path+"/model.min.glb", ((gltf) => {            
             gltf.scene.traverse((obj) => {
                 if(!obj.isMesh) return;
             
