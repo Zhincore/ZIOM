@@ -84,7 +84,7 @@ THREE.OrbitControls = function ( object, domElement ) {
     
     this.dIn = dollyIn;
     this.dOut = dollyOut;
-    this.lastZoomscale = 1;
+    this.lastZoomscale = 0;
     
 	//
 	// public methods
@@ -123,6 +123,13 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 		state = STATE.NONE;
 
+	};
+	
+	this.resetZoom = function () {
+	    scope.object.zoom = scope.zoom0;
+
+		scope.object.updateProjectionMatrix();
+		scope.dispatchEvent( changeEvent );
 	};
 
 	// this method is exposed, but perhaps it would be better if we can make it private...

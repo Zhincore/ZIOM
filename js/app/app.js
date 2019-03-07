@@ -44,7 +44,7 @@ const App = {
         x: 0,
         y: 0
     },
-    target: {vector:new THREE.Vector3(0, 0, 0), zoom:0},
+    cameraLocked: false,
     INTERSECTED: null,
     
     //
@@ -92,8 +92,8 @@ const App = {
             // Init controls
             this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
             this.controls.maxPolarAngle = Math.PI / 2;
-            this.controls.enableDamping = true;
-            this.controls.dampingFactor = 1.5;
+            //this.controls.enableDamping = true;
+            //this.controls.dampingFactor = 1.5;
             this.controls.minDistance = 5;
             this.controls.maxDistance = 50;
             this.controls.enableKeys = false;
@@ -167,18 +167,15 @@ const App = {
         
         $(".nav-item").click((ev) => {
             let target = $(ev.target).attr("data-name");
-            let pos = new THREE.Vector3(0, 0, 0);
             
             if(target == "all"){
-                this.controls.autoRotate = false;
-                this.target.vector = pos;
-                this.target.zoom = -5;
+                 this.cameraLock();
                 
             }else{
+                let pos = new THREE.Vector3(0, 0, 0);
                 this.overLayer.scene.getObjectByName(target).getWorldPosition(pos);
+                this.cameraLock(pos);
                 
-                this.target.vector = pos;
-                this.target.zoom = 5;
             }
         });
     },
@@ -261,13 +258,7 @@ const App = {
             //     by setting current intersection object to "nothing"
             this.INTERSECTED = null;
         }
-    
-        this.controls.target = this.target.vector;
-        if(this.target.zoom > 0){
-            this.controls.dIn(this.target.zoom);
-        }else if(this.target.zoom > 0){
-            this.controls.dOut(-this.target.zoom)
-        }
+
         this.controls.update();
     },
     
@@ -275,6 +266,32 @@ const App = {
         this.renderer.render(this.scene, this.camera);
         
         this.composer.render();
+    },
+    
+    //
+    // FUNCTIONS
+    //
+    cameraLock: function(vector){
+        let update = false;
+        if(vector !== undefined){
+            this.controls.resetZoom();
+            this.controls.dIn(5);
+            this.cameraLocked = true;
+            update = true;
+            
+        }else if(vector === undefined){
+            vector = new THREE.Vector3(0, 0, 0);
+            this.controls.reset();
+            this.cameraLocked = false;
+            update = true;
+
+        }        
+        
+        if(update){
+            this.controls.target = vector;
+            this.controls.update();
+        }
+        
     },
     
 }
