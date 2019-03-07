@@ -70,9 +70,6 @@ const App = {
             // Init renderer
             this.renderer = new THREE.WebGLRenderer({antialias: true, canvas: this.canvas, context: this.gl});
             this.renderer.setSize(window.innerWidth, window.innerHeight);
-            this.renderer.gammaInput = true;
-			this.renderer.gammaOutput = true;
-			this.renderer.shadowMap.enabled = true;
 			
 			
 			// Init stats
@@ -121,14 +118,17 @@ const App = {
 			this.scene.add( new THREE.HemisphereLight(0.5) );
         
             // Add postprocessing
-            this.ssaoPass = new THREE.SSAOPass( this.scene, this.camera, window.innerWidth, window.innerHeight );
-			this.ssaoPass.kernelRadius = 0.5;
-			this.ssaoPass.minDistance = 0.001;
-			this.ssaoPass.maxDistance = 0.016;
-			this.ssaoPass.renderToScreen = true;
-			
-			this.composer = new THREE.EffectComposer( this.renderer );
-			this.composer.addPass( this.ssaoPass );
+            this.composer = new THREE.EffectComposer( this.renderer );
+            
+            if(!$.browser.mobile){
+                this.ssaoPass = new THREE.SSAOPass( this.scene, this.camera, window.innerWidth, window.innerHeight );
+			    this.ssaoPass.kernelRadius = 0.5;
+			    this.ssaoPass.minDistance = 0.001;
+			    this.ssaoPass.maxDistance = 0.016;
+			    this.ssaoPass.renderToScreen = true;
+
+			    this.composer.addPass( this.ssaoPass );
+			}
 			
             this.composer.addPass( this.overLayer.renderPass );
             
@@ -141,8 +141,8 @@ const App = {
     loadLibs: function(){
         let lib = this.libs.shift();
         $.getScript(lib, () => {
-            $(document).trigger("ZIOM-libLoaded", [[lib, this.loadedLibs.length, this.libs.length]]);
             this.loadedLibs.push(lib);
+            $(document).trigger("ZIOM-libLoaded", [[lib, this.loadedLibs.length, this.libs.length]]);
             
             if(this.libs.length === 0){
                 // Exit loading loop
