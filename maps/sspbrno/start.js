@@ -57,7 +57,7 @@ const Model = {
             App.scene.add(gltf.scene);
             
             this.waypoints.forEach((obj) => {
-                App.overLayer.scene.add(obj);
+                //App.overLayer.scene.add(obj);
             });
             
             $(document).trigger("ZIOM-modelReady");
