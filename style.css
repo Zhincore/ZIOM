@@ -36,8 +36,7 @@ body{
 /**************/
 
 #overlay{
-    pointer-events: none;
-    z-index: 100;
+    
 }
 
 #alerts{
@@ -66,7 +65,6 @@ body{
 
 #initScreen{
     background-color: white;
-    pointer-events: auto;
 }
 
 #logo{
@@ -116,7 +114,7 @@ body{
     align-items: stretch;
 }
 
-.menu > li > a, .menu .menu-item{
+.menu .menu-item{
     padding: 8px 16px;
     margin: 2px;
     background-color: rgba(255, 255, 255, 0.75);
@@ -128,7 +126,6 @@ body{
     text-align: left;
     font-size: 17px;
     text-decoration: none;
-    pointer-events: auto;
     cursor: pointer;
 }
 

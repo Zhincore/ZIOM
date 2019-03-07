@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="height=device-height, initial-scale=1.0">
+        <link rel="stylesheet" href="css/fontawesome-all.min.css">
         <link rel="stylesheet" href="style.css">
         <title>ZIOM</title>
     </head>
@@ -31,15 +32,23 @@ CZ: Máte vypnutý Javascript.
             </div>
         </div>
         
-        <div id="controls" class="fulllay runtimeui" style="display: none">
+        <div id="controls" class="runtimeui" style="display: none">
             <div id="nav">
                 <ul class="menu">
+                    <li><form id="langSelect-form" class="menu-item nav-item" style="border-left: 0" action="#">
+                        <i class="fas fa-language fa-lg"></i>
+                        <select id="langSelect" name="lang" autocomplete=off autofocus>
+                            <option value="en">English</option>
+                            <option value="cs">Česky</option>
+                        </select>
+                    </form></li>
+                    
                     <li><button class="menu-item trn nav-item" style="" data-name="all" data-trn="everyting">waypoint</button></li>
                 </ul>
             </div>
         </div>
         
-        <div id="stats" class="fulllay runtimeui" style="display: none"></div>
+        <div id="stats" class="runtimeui" style="display: none"></div>
     </div>
     
     <canvas id="canvas"></canvas>
@@ -51,7 +60,7 @@ CZ: Máte vypnutý Javascript.
     <script src="js/app/app.js"></script>
     
     <script>
-        $(window).on("load", () => {
+        $(window).one("load", () => {
             $("#logo").delay(100).fadeIn("fast", () => {
                 try{
                 

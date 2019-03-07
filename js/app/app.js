@@ -90,10 +90,11 @@ const App = {
             
                
             // Init controls
-            this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+            this.controls = new THREE.OrbitControls(this.camera);
             this.controls.maxPolarAngle = Math.PI / 2;
             //this.controls.enableDamping = true;
             //this.controls.dampingFactor = 1.5;
+            this.controls.screenSpacePanning = true;
             this.controls.minDistance = 5;
             this.controls.maxDistance = 50;
             this.controls.enableKeys = false;
@@ -171,13 +172,14 @@ const App = {
             if(target == "all"){
                  this.cameraLock();
                 
-            }else{
+            }else if(target){
                 let pos = new THREE.Vector3(0, 0, 0);
                 this.overLayer.scene.getObjectByName(target).getWorldPosition(pos);
                 this.cameraLock(pos);
                 
             }
         });
+
     },
     
     //
@@ -259,7 +261,7 @@ const App = {
             this.INTERSECTED = null;
         }
 
-        this.controls.update();
+        //this.controls.update();
     },
     
     render: function(){        
