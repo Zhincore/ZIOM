@@ -224,6 +224,19 @@ const App = {
                 
             }
             return false;
+            
+        }).hover((ev) => {
+            let target = $(ev.target).attr("data-name");
+            if(!this.cameraLock || target !== this.cameraLock.name){
+                this.highlightObj(this.overLayer.scene.getObjectByName(target), 5);
+            }
+            
+        }, (ev) => {
+            let target = $(ev.target).attr("data-name");
+            if(!this.cameraLock || target !== this.cameraLock.name){
+                this.highlightObj(this.overLayer.scene.getObjectByName(target));
+            }
+            
         });
 
     },
