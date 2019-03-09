@@ -23,8 +23,6 @@ const App = {
         "js/modules/renderers/CSS2DRenderer.js",
     ],
     
-    menuTemplate: "<li><button class='menu-item trn nav-item' style='border-color: $3$aa' data-name='$1$' data-trn='$2$'>waypoint</button></li>",
-    
     //
     // VARIABLES
     //
@@ -129,7 +127,7 @@ const App = {
         });
         
         $(document).one("ZIOM-modelReady", () => {
-            this.prepareMenus();
+            Gui.init();
             this.labelRenderer.render(this.overLayer.scene, this.camera);
             $(this.labelRenderer.domElement).find(".trn").translate();
         
@@ -206,39 +204,6 @@ const App = {
         this.renderer.context.canvas.addEventListener("webglcontextrestored", function(event) {
             contextRestored();
         }, false); 
-    },
-    
-    //
-    prepareMenus: function(){
-        $("#nav .menu").append($.parseHTML(config2menu(configSort(this.model.config.waypoints))));
-        $("#nav .trn").translate();
-        
-        $(".nav-item").click((ev) => {
-            let target = $(ev.target).attr("data-name");
-            
-            if(target == "reset"){
-                 this.lockCamera();
-                
-            }else if(target){
-                this.lockCamera(this.overLayer.scene.getObjectByName(target));
-                
-            }
-            return false;
-            
-        }).hover((ev) => {
-            let target = $(ev.target).attr("data-name");
-            if(!this.cameraLock || target !== this.cameraLock.name){
-                this.highlightObj(this.overLayer.scene.getObjectByName(target), 5);
-            }
-            
-        }, (ev) => {
-            let target = $(ev.target).attr("data-name");
-            if(!this.cameraLock || target !== this.cameraLock.name){
-                this.highlightObj(this.overLayer.scene.getObjectByName(target));
-            }
-            
-        });
-
     },
     
     //
@@ -446,7 +411,32 @@ const App = {
             // set a new color for closest object
             obj.material.opacity = highlight * 0.1;
         }
-    }
+    },
+    
+    highlightFloor: function(obj, highlight){
+        if(!obj) return;
+        if(!obj.origColor){
+            obj.origColor = "#"+obj.material.color.getHexString();
+        }
+        
+        obj.userData.style = {color: "#"+obj.material.color.getHexString()};
+        
+        if(!highlight){
+            $(obj.userData).stop().animate({
+                color: obj.origColor
+            }, {step: ()=>{
+                obj.material.color.set(obj.userData.style.color);
+            }});
+            
+        }else{
+            // set a new color for closest object
+            $(obj.userData).stop().animate({
+                color: "#5577FF"
+            }, {step: ()=>{
+                obj.material.color.set(obj.userData.style.color);
+            }});
+        }
+    },
     
 }
 
@@ -466,48 +456,6 @@ class Layer {
 	}
 }
 
-//
-// FUNCTIONS
-//
-function config2menu(object){
-    let output = "";
-    
-    for (let key in object) {
-        // skip loop if the property is from prototype
-        if (!object.hasOwnProperty(key)) continue;
-        
-        let obj = object[key];
-        let template = App.menuTemplate;
-        
-        output += template.replace("$1$", key).replace("$2$", obj.name).replace("$3$", obj.color);
-    }
-    
-    return output;
-}
 
-function configCompare(a,b) {
-  if (a[1].name < b[1].name)
-    return -1;
-  if (a[1].name > b[1].name)
-    return 1;
-  return 0;
-}
-
-function configSort(object){
-    let sortable = [];
-    let sorted = {};
-    
-    for (let key in object) {
-        sortable.push([key, object[key]]);
-    }
-    
-    sortable.sort(configCompare);
-    
-    sortable.forEach((el) => {
-        sorted[el[0]] = el[1];
-    });
-    
-    return sorted;
-}
 
 

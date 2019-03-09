@@ -6,7 +6,10 @@
 }
 
 body{
-
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    color: #000000;
 }
 
 #canvas{
@@ -121,6 +124,27 @@ body{
 
 
 /****/
+
+.dropdown-toggle{
+    width: 100%;
+}
+
+.dropdown-toggle span::after{
+    font-family: "Font Awesome 5 Free"; font-weight: 900; content: " \f0d7";
+}
+
+.dropdown-toggle.up span::after{
+    font-family: "Font Awesome 5 Free"; font-weight: 900; content: " \f0d8";
+}
+
+.collapsible{
+    overflow: hidden;
+}
+
+.collapsible.hidden{
+    display: none;
+}
+
 
 .menu{
     list-style-type: none;

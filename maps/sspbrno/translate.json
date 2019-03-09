@@ -30,5 +30,25 @@
     "library":{
         "en": "Library",
         "cs": "Knihovna"
+    },
+    "0floor":{
+        "en": "0th floor",
+        "cs": "0. Patro"
+    },
+    "1floor":{
+        "en": "1st floor",
+        "cs": "1. Patro"
+    },
+    "2floor":{
+        "en": "2nd floor",
+        "cs": "2. Patro"
+    },
+    "3floor":{
+        "en": "3rd floor",
+        "cs": "3. Patro"
+    },
+    "4floor":{
+        "en": "4th floor",
+        "cs": "4. Patro"
     }
 }

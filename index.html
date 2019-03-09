@@ -35,7 +35,7 @@ CZ: Máte vypnutý Javascript.
         <div id="controls" class="runtimeui" style="display: none">
             <div id="nav">
             
-                <button class="menu-item" style="margin-left: auto;">Navigace</button>
+                <button class="menu-item dropdown-toggle down"  data-toggle="#nav-colap"><span class="trn" data-trn="navigation">Navigace</span></button>
                 
                 <div id="nav-colap" class="collapsible" style="top: 0">
                     <ul class="menu">
@@ -55,13 +55,14 @@ CZ: Máte vypnutý Javascript.
             </div>
             
             <div id="options">
-                <div id="options-colap" class="collapsible" style="bottom: 0">
+                <div id="options-colap" class="collapsible hidden" style="bottom: 0">
                     <ul class="menu">
-                        <li><button class="menu-item trn" style="" data-name="all" data-trn="everyting">waypoint</button></li>
+                        <form id="options-form">
+                        </form>
                     </ul>
                 </div>
                 
-                <button class="menu-item">Zobrazení</button>
+                <button class="menu-item dropdown-toggle up" data-toggle="#options-colap"><span class="trn" data-trn="display">display</span></button>
                 
             </div>
         </div>
@@ -73,11 +74,13 @@ CZ: Máte vypnutý Javascript.
     
     <!-- js -->
     <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery.color-2.1.2.min.js"></script>
     <script src="js/translation.js"></script>
     <script src="js/jquery.detectmobilebrowser.js"></script>
     <script src="js/jquery.draglessClick.js"></script>
     <script src="js/three.min.js"></script>
-    <script src="js/app/app.js"></script>
+    <script src="js/app/Gui.js"></script>
+    <script src="js/app/App.js"></script>
     
     <script>
         $(window).one("load", () => {
@@ -164,6 +167,7 @@ CZ: Máte vypnutý Javascript.
         </div>
         
     </div>
+    <div id="dummy" style="display: none;"></div>
     
     </body>
 </html>
