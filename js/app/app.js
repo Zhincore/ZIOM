@@ -2,6 +2,7 @@ const App = {
     //
     // CONFIG
     //
+    bgColor: new THREE.Color(0xeaeaea),
     models: "maps/",
     libs: [
         "js/modules/libs/stats.min.js",
@@ -17,7 +18,7 @@ const App = {
         "js/modules/SimplexNoise.js",
         
         "js/modules/renderers/Projector.js",
-        
+        "js/modules/renderers/CSS2DRenderer.js",
     ],
     
     menuTemplate: "<li><button class='menu-item trn nav-item' style='border-color: $3$aa' data-name='$1$' data-trn='$2$'>waypoint</button></li>",
@@ -36,6 +37,7 @@ const App = {
     ssaoPass: null,
     effectComposer: null,
     overLayer: null,
+    labelRenderer: null,
     loader: null,
     loadedLibs: [],
     model: null,
@@ -44,8 +46,9 @@ const App = {
         x: 0,
         y: 0
     },
-    cameraLocked: false,
+    cameraLock: null,
     INTERSECTED: null,
+    animationID: null,
     
     //
     // INIT
@@ -58,13 +61,12 @@ const App = {
 
         // Load libs
         //this.loadLibs();
-        this.registerListeners();
         $(document).trigger("ZIOM-initialized");
     
         $(document).one("ZIOM-libsReady", () => {
             // Init scene
             this.scene = new THREE.Scene();
-            this.scene.background = new THREE.Color(0xeaeaea);
+            this.scene.background = this.bgColor;
 
 
             // Init renderer
@@ -84,6 +86,16 @@ const App = {
             // Prepare layers    
             this.overLayer = new Layer( this.camera );
             this.overLayer.scene.add( new THREE.AmbientLight( 0xFFFFFF ) );
+            
+            
+            // Init 2D renderer
+	        this.labelRenderer = new THREE.CSS2DRenderer();
+	        this.labelRenderer.setSize( window.innerWidth, window.innerHeight );
+	        this.labelRenderer.domElement.style.position = 'absolute';
+	        this.labelRenderer.domElement.style.top = 0;
+	        this.labelRenderer.domElement.style.left = 0;
+	        this.labelRenderer.domElement.id = "labelContainer";
+	        document.body.appendChild( this.labelRenderer.domElement );
             
                
             // Init controls
@@ -108,11 +120,14 @@ const App = {
             // Init loader
             this.loader = new THREE.GLTFLoader();
             
+            this.registerListeners();
             //this.loadModel("sspbrno");
         });
         
         $(document).one("ZIOM-modelReady", () => {
             this.prepareMenus();
+            this.labelRenderer.render(this.overLayer.scene, this.camera);
+            $(this.labelRenderer.domElement).find(".trn").translate();
         
             this.scene.add( new THREE.DirectionalLight() );
 			this.scene.add( new THREE.HemisphereLight(0.5) );
@@ -158,7 +173,19 @@ const App = {
     //
     registerListeners: function(){       
         $(window).resize((this.onResize).bind(this)); 
-        $(document).mousemove((this.onMouseMove).bind(this));   
+        $(document).mousemove((this.onMouseMove).bind(this));
+        $(document).on("draglessClick", (this.onDraglessClick).bind(this));
+        
+        this.renderer.context.canvas.addEventListener("webglcontextlost", function(event) {
+            event.preventDefault();
+            contextLost();
+            // animationID would have been set by your call to requestAnimationFrame
+            cancelAnimationFrame(this.animationID); 
+        }, false);
+
+        this.renderer.context.canvas.addEventListener("webglcontextrestored", function(event) {
+            contextRestored();
+        }, false); 
     },
     
     //
@@ -170,14 +197,13 @@ const App = {
             let target = $(ev.target).attr("data-name");
             
             if(target == "all"){
-                 this.cameraLock();
+                 this.lockCamera();
                 
             }else if(target){
-                let pos = new THREE.Vector3(0, 0, 0);
-                this.overLayer.scene.getObjectByName(target).getWorldPosition(pos);
-                this.cameraLock(pos);
+                this.lockCamera(this.overLayer.scene.getObjectByName(target));
                 
             }
+            return false;
         });
 
     },
@@ -202,6 +228,7 @@ const App = {
 	    this.camera.aspect = width / height;
 	    this.camera.updateProjectionMatrix();
 	    this.renderer.setSize( width, height );
+	    this.labelRenderer.setSize( width, height );
 	    this.ssaoPass.setSize( width, height );
     },
     
@@ -211,12 +238,20 @@ const App = {
         this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     },
     
+    onDraglessClick: function(event){
+        if(this.INTERSECTED){
+            this.lockCamera(this.INTERSECTED);
+        }else if(this.cameraLock){
+            this.lockCamera();
+        }
+    },
+    
     
     //
     // RENDER
     //
     animate: function(){
-        requestAnimationFrame(this.animate.bind(this));
+        this.animationID = requestAnimationFrame(this.animate.bind(this));
         this.stats.begin();
         this.render();
         this.update();
@@ -239,52 +274,80 @@ const App = {
             // if the closest object intersected is not the currently stored intersection object
             if (intersects[0].object != this.INTERSECTED) {
                 // restore previous intersection object (if it exists) to its original color
-                if (this.INTERSECTED){
-                    this.INTERSECTED.material.opacity = this.INTERSECTED.origOpacity;
+                if (this.INTERSECTED && this.INTERSECTED != this.cameraLock){
+                    this.highlightObj(this.INTERSECTED);
                 }
-                if(intersects[0].object.name.startsWith("waypoint")){
+                
+                if(intersects[0].object.name.startsWith("waypoint") && intersects[0].object != this.cameraLock){
                     // store reference to closest object as current intersection object
                     this.INTERSECTED = intersects[0].object;
-                    // store color of closest object (for later restoration)
-                    this.INTERSECTED.origOpacity = this.INTERSECTED.material.opacity;
-                    // set a new color for closest object
-                    this.INTERSECTED.material.opacity = 0.5;
+                    this.highlightObj(this.INTERSECTED, 5);
                 }
             }
         } else { // there are no intersections
             // restore previous intersection object (if it exists) to its original color
-            if (this.INTERSECTED){
-                this.INTERSECTED.material.opacity = this.INTERSECTED.origOpacity;
+            if (this.INTERSECTED && this.INTERSECTED !== this.cameraLock){
+                this.highlightObj(this.INTERSECTED);
             }
             // remove previous intersection object reference
             //     by setting current intersection object to "nothing"
             this.INTERSECTED = null;
         }
+        
+        // Hide tags
+        var frustum = new THREE.Frustum();
+        frustum.setFromMatrix(new THREE.Matrix4().multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse));  
 
-        //this.controls.update();
+        this.model.tags.forEach((tag) => {
+            var tagPos = new THREE.Vector3();
+            tag.getWorldPosition(tagPos);
+            if(frustum.containsPoint(tagPos)) {
+                tag.element.style.visibility = "visible";
+            }else{
+                tag.element.style.visibility = "hidden";
+            }
+        });
+        
+        if(this.controls.autoRotate){
+            this.controls.update();
+        }
     },
     
     render: function(){        
         this.renderer.render(this.scene, this.camera);
         
         this.composer.render();
+        
+        this.labelRenderer.render(this.overLayer.scene, this.camera);
     },
     
     //
     // FUNCTIONS
     //
-    cameraLock: function(vector){
+    lockCamera: function(obj){
         let update = false;
-        if(vector !== undefined){
+        let vector = new THREE.Vector3(0, 0, 0);
+        
+        if(obj !== undefined){
+            if(this.cameraLock == obj){
+                return;
+            }
+            if(this.cameraLock){
+                this.highlightObj(this.cameraLock);
+            }
+            obj.getWorldPosition(vector);
             this.controls.resetZoom();
             this.controls.dIn(5);
-            this.cameraLocked = true;
-            update = true;
+            this.cameraLock = obj;
+            this.highlightObj(obj, 7);
             
-        }else if(vector === undefined){
-            vector = new THREE.Vector3(0, 0, 0);
+            update = true;
+                        
+        }else if(obj === undefined){
+            this.highlightObj(this.cameraLock);
             this.controls.reset();
-            this.cameraLocked = false;
+            this.cameraLock = undefined;
+            
             update = true;
 
         }        
@@ -295,6 +358,20 @@ const App = {
         }
         
     },
+    highlightObj: function(obj, highlight){
+        if(!highlight && obj.origOpacity){
+            obj.material.opacity = obj.origOpacity;
+            obj.origOpacity = undefined;
+            
+        }else{
+            if(!obj.origOpacity){
+                // store color of closest object (for later restoration)
+                obj.origOpacity = obj.material.opacity;
+            }
+            // set a new color for closest object
+            obj.material.opacity = highlight * 0.1;
+        }
+    }
     
 }
 

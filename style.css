@@ -35,6 +35,22 @@ body{
 
 /**************/
 
+#labelContainer{
+    pointer-events: none;
+}
+
+.label{
+    background-color: rgba(255, 255, 255, .25);
+    display: block;
+    position: absolute;
+    transform: translateY(-100%);
+    white-space: nowrap;
+    padding: 2px;
+    border-left: 3px solid;
+}
+
+/**************/
+
 #overlay{
     
 }
@@ -129,11 +145,19 @@ body{
     cursor: pointer;
 }
 
+#nav, #options{
+    position: absolute;
+    z-index: 2000;
+}
 
 #nav{
-    position: absolute;
     top: 0;
     right: 0;
+}
+
+#options{
+    bottom: 0;
+    left: 0;
 }
 
 

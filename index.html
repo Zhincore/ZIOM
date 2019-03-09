@@ -46,6 +46,20 @@ CZ: Máte vypnutý Javascript.
                     <li><button class="menu-item trn nav-item" style="" data-name="all" data-trn="everyting">waypoint</button></li>
                 </ul>
             </div>
+            
+            <div id="options">
+                <ul class="menu">
+                    <li><form id="langSelect-form" class="menu-item nav-item" style="border-left: 0" action="#">
+                        <i class="fas fa-language fa-lg"></i>
+                        <select id="langSelect" name="lang" autocomplete=off autofocus>
+                            <option value="en">English</option>
+                            <option value="cs">Česky</option>
+                        </select>
+                    </form></li>
+                    
+                    <li><button class="menu-item trn nav-item" style="" data-name="all" data-trn="everyting">waypoint</button></li>
+                </ul>
+            </div>
         </div>
         
         <div id="stats" class="runtimeui" style="display: none"></div>
@@ -57,6 +71,7 @@ CZ: Máte vypnutý Javascript.
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/translation.js"></script>
     <script src="js/jquery.detectmobilebrowser.js"></script>
+    <script src="js/jquery.draglessClick.js"></script>
     <script src="js/three.min.js"></script>
     <script src="js/app/app.js"></script>
     
@@ -75,6 +90,18 @@ CZ: Máte vypnutý Javascript.
                 }
             });
         });
+        
+        function contextLost(){
+            $("#alerts").append($("#TEMPLATES > .alert-error").clone().attr("id", "contextlost").hide().text("WebGL context lost! Maybe insufficent RAM?").delay(1).slideDown());
+        }
+        function contextRestored(){
+            $("#contextlost").slideUp().remove();
+            $("#alerts").append($("#TEMPLATES > .alert-success").clone().attr("id", "contextrestored").hide().text("WebGL context RESTORED!").delay(1).slideDown());
+            
+            setTimeout(() => {
+                $("#contextrestored").slideUp().remove();
+            }, 2500);
+        }
         
         
         $(document).one("ZIOM-initialized", () => {
