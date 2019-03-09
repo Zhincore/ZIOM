@@ -85,6 +85,7 @@ THREE.OrbitControls = function ( object, domElement ) {
     this.dIn = dollyIn;
     this.dOut = dollyOut;
     this.lastZoomscale = 0;
+    this.scale = 1;
     
 	//
 	// public methods

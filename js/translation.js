@@ -1,8 +1,8 @@
 (function ( $ ) {
     $.dict = {
-        "everyting": {
-            "en":"Everything",
-            "cs":"Vše"
+        "reset": {
+            "en":"Reset",
+            "cs":"Resetovat"
         }
     };
     

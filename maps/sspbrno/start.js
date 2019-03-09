@@ -1,6 +1,7 @@
 const Model = {
     path: "",
     config: null,
+    box: null,
     waypoints: [],
     tags: [],
     
@@ -30,6 +31,11 @@ const Model = {
                 
                 if(obj.name === "Ground"){
                     obj.material.color.set(0xe8e8e8);
+                    
+                }else if(obj.name === "boundingBox"){
+                    obj.material.visible = false;
+                    obj.geometry.computeBoundingBox();
+                    this.box = obj.geometry.boundingBox;
                     
                 }else if(obj.name === "Paths"){
                     obj.material.color.set(0xf0f0f0);

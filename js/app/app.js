@@ -46,6 +46,7 @@ const App = {
         x: 0,
         y: 0
     },
+    cameraTarget: new THREE.Vector3(),
     cameraLock: null,
     INTERSECTED: null,
     animationID: null,
@@ -95,11 +96,11 @@ const App = {
 	        this.labelRenderer.domElement.style.top = 0;
 	        this.labelRenderer.domElement.style.left = 0;
 	        this.labelRenderer.domElement.id = "labelContainer";
-	        document.body.appendChild( this.labelRenderer.domElement );
+	        $("#overlay").append( this.labelRenderer.domElement );
             
                
             // Init controls
-            this.controls = new THREE.OrbitControls(this.camera);
+            this.controls = new THREE.OrbitControls(this.camera, this.canvas);
             this.controls.maxPolarAngle = Math.PI / 2;
             //this.controls.enableDamping = true;
             //this.controls.dampingFactor = 1.5;
@@ -196,8 +197,8 @@ const App = {
         $(".nav-item").click((ev) => {
             let target = $(ev.target).attr("data-name");
             
-            if(target == "all"){
-                 this.lockCamera();
+            if(target == "reset"){
+                 this.lockCamera(false);
                 
             }else if(target){
                 this.lockCamera(this.overLayer.scene.getObjectByName(target));
@@ -308,7 +309,11 @@ const App = {
             }
         });
         
-        if(this.controls.autoRotate){
+        if(!this.model.box.containsPoint(this.controls.target)){
+            this.model.box.clampPoint(this.controls.target, this.controls.target);
+            this.controls.update();
+            
+        }else if(this.controls.autoRotate){
             this.controls.update();
         }
     },
@@ -326,9 +331,13 @@ const App = {
     //
     lockCamera: function(obj){
         let update = false;
+        let zoom = {value: 0, to: null};
         let vector = new THREE.Vector3(0, 0, 0);
+        let reset = false;
         
-        if(obj !== undefined){
+        $(this.controls.target).finish();
+        
+        if(obj !== undefined && obj){
             if(this.cameraLock == obj){
                 return;
             }
@@ -336,25 +345,61 @@ const App = {
                 this.highlightObj(this.cameraLock);
             }
             obj.getWorldPosition(vector);
-            this.controls.resetZoom();
-            this.controls.dIn(5);
+            //this.controls.resetZoom();
+            //this.controls.dIn(5);
+            zoom.to = 5;
             this.cameraLock = obj;
             this.highlightObj(obj, 7);
             
             update = true;
-                        
-        }else if(obj === undefined){
-            this.highlightObj(this.cameraLock);
-            this.controls.reset();
-            this.cameraLock = undefined;
             
+        }else if(obj === false){
+            //this.controls.reset();
+                      
+        }else if(obj === undefined){
+            if(this.cameraLock){
+                this.highlightObj(this.cameraLock);
+
+                this.cameraLock = undefined;
+            }
+            reset = true;
             update = true;
 
         }        
         
         if(update){
-            this.controls.target = vector;
-            this.controls.update();
+            // Animate target position
+            $(this.controls.target).animate({
+                x: vector.x,
+                y: vector.y,
+                z: vector.z
+            }, {step: (now) => {
+                this.controls.update();
+            } });
+            
+            // Animate camera position
+            if(reset){
+                  $(this.controls.object.position).animate({
+                    x: this.controls.position0.x,
+                    y: this.controls.position0.y,
+                    z: this.controls.position0.z
+                }, {step: (now) => {
+                    this.controls.update();
+                } });  
+            }
+            
+            //Animate zoom
+            if(zoom.to){
+                $(zoom).animate({
+                    value: 1
+                }, {step: (now) => {
+                    if(zoom.to > 0){
+                        this.controls.dIn(1/Math.abs(zoom.to)*now+1);
+                    }else{
+                        this.controls.dOut(1/Math.abs(zoom.to)*now+1);
+                    }
+                } });
+            }
         }
         
     },
