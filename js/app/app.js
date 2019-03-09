@@ -198,7 +198,7 @@ const App = {
             let target = $(ev.target).attr("data-name");
             
             if(target == "reset"){
-                 this.lockCamera(false);
+                 this.lockCamera();
                 
             }else if(target){
                 this.lockCamera(this.overLayer.scene.getObjectByName(target));
@@ -352,10 +352,7 @@ const App = {
             this.highlightObj(obj, 7);
             
             update = true;
-            
-        }else if(obj === false){
-            //this.controls.reset();
-                      
+
         }else if(obj === undefined){
             if(this.cameraLock){
                 this.highlightObj(this.cameraLock);

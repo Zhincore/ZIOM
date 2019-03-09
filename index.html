@@ -135,6 +135,11 @@ CZ: Máte vypnutý Javascript.
         
         
         $(document).one("ZIOM-modelReady", () => {
+            $("#langSelect").val($.lang).on("input", (ev) => {
+                $.lang = $(ev.target).val();
+                $(".trn").translate();
+            });
+        
             $("#initScreen").delay(500).fadeOut();
             $(".runtimeui").fadeIn();
         });

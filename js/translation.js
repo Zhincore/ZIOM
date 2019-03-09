@@ -6,9 +6,11 @@
         }
     };
     
+    $.lang = window.navigator.language || window.navigator.userLanguage || undefined;
+    
     // $(selector).translate(lang)
     $.fn.translate = function(lang) {
-        lang = lang || window.navigator.language || window.navigator.userLanguage || ""; 
+        lang = lang || $.lang; 
 
         switch(lang){
             case "en-US":
