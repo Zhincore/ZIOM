@@ -3,12 +3,14 @@ const App = {
     // CONFIG
     //
     bgColor: new THREE.Color(0xeaeaea),
+    cameraSpeed: 500,
     models: "maps/",
     libs: [
         "js/modules/libs/stats.min.js",
         "js/modules/loaders/GLTFLoader.js",
         "js/modules/controls/OrbitControls.modified.js",
         "js/modules/shaders/SSAOShader.js",
+        "js/modules/shaders/FXAAShader.js",
 
         "js/modules/postprocessing/EffectComposer.js",
         "js/modules/postprocessing/ShaderPass.js",
@@ -73,6 +75,7 @@ const App = {
             // Init renderer
             this.renderer = new THREE.WebGLRenderer({antialias: true, canvas: this.canvas, context: this.gl});
             this.renderer.setSize(window.innerWidth, window.innerHeight);
+            //this.renderer.setPixelRatio( window.devicePixelRatio * 1.2 );
 			
 			
 			// Init stats
@@ -133,19 +136,35 @@ const App = {
             this.scene.add( new THREE.DirectionalLight() );
 			this.scene.add( new THREE.HemisphereLight(0.5) );
         
-            // Add postprocessing
+        
+            // Add postprocessing           
+            this.renderTarget = new THREE.WebGLRenderTarget( window.innerWidth, window.innerHeight );
             this.composer = new THREE.EffectComposer( this.renderer );
+            this.composer.addPass( new THREE.RenderPass(this.scene, this.camera) );
             
-            if(!$.browser.mobile){
+            
+            /// FXAA
+            this.effectFXAA = new THREE.ShaderPass( THREE.FXAAShader );
+            this.effectFXAA.uniforms["resolution"].value.set(1/window.innerWidth, 1/window.innerHeight);
+            this.effectFXAA.renderToScreen = true;
+            
+            this.composer.addPass( this.effectFXAA );
+            
+            
+            /// SSAO
+            /*if(!$.browser.mobile){
                 this.ssaoPass = new THREE.SSAOPass( this.scene, this.camera, window.innerWidth, window.innerHeight );
 			    this.ssaoPass.kernelRadius = 0.5;
 			    this.ssaoPass.minDistance = 0.001;
 			    this.ssaoPass.maxDistance = 0.016;
-			    this.ssaoPass.renderToScreen = true;
+			    this.ssaoPass.renderToScreen = false;
 
 			    this.composer.addPass( this.ssaoPass );
-			}
+			}*/
 			
+            
+            /// Overlayer
+            this.overLayer.renderPass.renderToScreen = true;
             this.composer.addPass( this.overLayer.renderPass );
             
             this.animate();
@@ -230,7 +249,7 @@ const App = {
 	    this.camera.updateProjectionMatrix();
 	    this.renderer.setSize( width, height );
 	    this.labelRenderer.setSize( width, height );
-	    this.ssaoPass.setSize( width, height );
+	    //this.ssaoPass.setSize( width, height );
     },
     
     //
@@ -318,8 +337,9 @@ const App = {
         }
     },
     
-    render: function(){        
-        this.renderer.render(this.scene, this.camera);
+    render: function(){
+        //this.renderer.render(this.scene, this.camera);
+        //this.renderer.clear();
         
         this.composer.render();
         
@@ -372,7 +392,7 @@ const App = {
                 z: vector.z
             }, {step: (now) => {
                 this.controls.update();
-            } });
+            }, duration: this.cameraSpeed });
             
             // Animate camera position
             if(reset){
@@ -382,7 +402,7 @@ const App = {
                     z: this.controls.position0.z
                 }, {step: (now) => {
                     this.controls.update();
-                } });  
+                }, duration: this.cameraSpeed });  
             }
             
             //Animate zoom
@@ -395,7 +415,7 @@ const App = {
                     }else{
                         this.controls.dOut(1/Math.abs(zoom.to)*now+1);
                     }
-                } });
+                }, duration: this.cameraSpeed });
             }
         }
         

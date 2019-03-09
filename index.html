@@ -34,25 +34,35 @@ CZ: Máte vypnutý Javascript.
         
         <div id="controls" class="runtimeui" style="display: none">
             <div id="nav">
-                <ul class="menu">
-                    <li><div class="menu-item" style="border-left: 0">
-                        <form id="langSelect-form">
-                            <i class="fas fa-language fa-lg"></i>
-                            <select id="langSelect">
-                                <option value="en">English</option>
-                                <option value="cs">Česky</option>
-                            </select> 
-                        </form>
-                    </div></li>
-                    
-                    <li><button class="menu-item trn nav-item" style="" data-name="reset" data-trn="reset">reset</button></li>
-                </ul>
+            
+                <button class="menu-item" style="margin-left: auto;">Navigace</button>
+                
+                <div id="nav-colap" class="collapsible" style="top: 0">
+                    <ul class="menu">
+                        <li><div class="menu-item" style="border-left: 0">
+                            <form id="langSelect-form">
+                                <i class="fas fa-language fa-lg"></i>
+                                <select id="langSelect">
+                                    <option value="en">English</option>
+                                    <option value="cs">Česky</option>
+                                </select> 
+                            </form>
+                        </div></li>
+                        
+                        <li><button class="menu-item trn nav-item" style="" data-name="reset" data-trn="reset">reset</button></li>
+                    </ul>
+                </div>
             </div>
             
             <div id="options">
-                <ul class="menu">
-                    <li><button class="menu-item trn nav-item" style="" data-name="all" data-trn="everyting">waypoint</button></li>
-                </ul>
+                <div id="options-colap" class="collapsible" style="bottom: 0">
+                    <ul class="menu">
+                        <li><button class="menu-item trn" style="" data-name="all" data-trn="everyting">waypoint</button></li>
+                    </ul>
+                </div>
+                
+                <button class="menu-item">Zobrazení</button>
+                
             </div>
         </div>
         
