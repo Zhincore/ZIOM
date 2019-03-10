@@ -40,10 +40,10 @@ CZ: Máte vypnutý Javascript.
                 <div id="hud" class="runtimeui row" style="display: none">
                 
                     <div class="column">
-                        <div id="run-logo">
+                        <div id="run-logo" class="mobile-col">
                             <!--<img src="images/ZIOM.png">-->
                             <h1>ZIOM</h1>
-                            <span>&#8212;</span>
+                            <span class="mobile-none">&#8212;</span>
                             <p class="trn" data-trn="ziom-">Zhincore's Interactive Object Map</p>
                         </div>
                         
@@ -59,10 +59,10 @@ CZ: Máte vypnutý Javascript.
                         </div>
                     </div>
                     
-                    <div class="column">
+                    <div class="column mobile-none">
                         <form id="objSelection-form">
                             <label for="objSelection"><span class="trn" data-trn="selected-obj">selected obj</span>: </label>
-                            <div class="row" style="align-items: center">
+                            <div class="row align-center" style="align-items: center">
                                 <img src="images/empty.png" class="model-logo">
                                 <div id="objSelection-wrap" class="custom-select"><select id="objSelection">
                                     <option value="sspbrno">SSPBrno</option>
@@ -79,12 +79,12 @@ CZ: Máte vypnutý Javascript.
                     <div id="nav-colap" class="collapsible" style="top: 0">
                         <ul class="menu">
                             <li><div class="menu-item" style="border-left: 0">
-                                <form id="langSelect-form">
-                                    <i class="fas fa-language fa-lg"></i>
-                                    <select id="langSelect">
+                                <form id="langSelect-form" class="align-center">
+                                    <i class="fas fa-language fa-lg space"></i>
+                                    <div class="custom-select"><select id="langSelect">
                                         <option value="en">English</option>
                                         <option value="cs">Česky</option>
-                                    </select> 
+                                    </select></div>
                                 </form>
                             </div></li>
                             

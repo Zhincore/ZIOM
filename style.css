@@ -79,6 +79,14 @@ body{
     flex-direction: row;
 }
 
+.align-center{
+    display: flex;
+    align-items: center;
+}
+
+.space{
+    margin: 8px;
+}
 
 .fulllay{
     position: absolute;
@@ -91,6 +99,21 @@ body{
     justify-content: center;
     align-items: center;
     flex-flow: column wrap;
+}
+
+@media only screen and (max-width: 768px){
+    .mobile-none{
+        display: none;
+    }
+    .mobile-col{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    .column{
+        width: 100%;
+        align-items: center;
+    }
 }
 
 /**************/
@@ -216,6 +239,8 @@ body{
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    overflow-x: auto;
+    max-height: calc(100vh - 140px);
 }
 
 .menu-item{
@@ -271,10 +296,6 @@ body{
     .menu, .menu-item, #nav, #hud, #options{
         width: 100%;
     }
-    
-    .mobile-none{
-        display: none;
-    }
 }
 
 /****/
@@ -326,5 +347,11 @@ body{
 
 .tip-content .fas,.tip-content .fab,.tip-content .far{
     margin: 6px;
+}
+
+@media only screen and (max-width: 768px){
+    #run-logo{
+        font-size: 8pt;
+    }
 }
 
