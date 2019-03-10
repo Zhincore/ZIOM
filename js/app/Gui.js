@@ -1,10 +1,13 @@
 const Gui = {
     navTemplate: "<li><button class='menu-item trn nav-item' style='border-color: $3$aa' data-name='$1$' data-trn='$2$'>waypoint</button></li>",
     optTemplate: "<li><div class='menu-item $4$' data-name='$1$' style='border-color: $3$aa'>\
-    <input type='checkbox' id='o-$1$' name='$1$' checked> <label for='o-$1$' class='trn' data-trn='$2$'>option<label></div></li>",
+    <input type='checkbox' id='o-$1$' name='$1$' $checked$> <label for='o-$1$' class='trn' data-trn='$2$'>option<label></div></li>",
     
     init: function(){
-        this.prepareMenus();
+        $.getJSON("js/app/translation.json", (data) => {
+            Object.assign($.dict, data);
+            this.prepareMenus(); 
+        });
         
     },
     
@@ -53,6 +56,11 @@ const Gui = {
             "highlight":{
                 "name":"highlight",
                 "color": "#00ff00"
+            },
+            "autoRotate":{
+                "name":"autoRotate",
+                "color": "#0000ff",
+                "unchecked": true
             }
         }, this.optTemplate)));
         
@@ -104,6 +112,8 @@ const Gui = {
             }else if(key === "highlight"){
                 App.overLayer.renderPass.enabled = data[key];
                 
+            }else if(key === "autoRotate"){
+                App.controls.autoRotate = data[key];
             }
         }
     },
@@ -121,9 +131,10 @@ function config2menu(object, template){
         
         let obj = object[key];
         let floorclass = key.startsWith("floor") ? "cfloor" : "";
+        let checked = obj.unchecked ? "" : "checked";
         //let template = Gui.navTemplate;
         
-        output += template.replace("$1$", key).replace("$1$", key).replace("$1$", key).replace("$1$", key).replace("$2$", obj.name).replace("$3$", obj.color).replace("$4$", floorclass);
+        output += template.replace("$1$", key).replace("$1$", key).replace("$1$", key).replace("$1$", key).replace("$2$", obj.name).replace("$3$", obj.color).replace("$4$", floorclass).replace("$checked$", checked);
     }
     
     return output;

@@ -227,7 +227,9 @@ const App = {
 	    this.camera.updateProjectionMatrix();
 	    this.renderer.setSize( width, height );
 	    this.labelRenderer.setSize( width, height );
+	    //this.effectFXAA.uniforms["resolution"].value.set(1/width, 1/height);
 	    //this.ssaoPass.setSize( width, height );
+	    this.composer.setSize(width, height);
     },
     
     //

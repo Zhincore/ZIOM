@@ -12,7 +12,7 @@ const Model = {
             this.config = data;
             
             // Load translations
-            $.getJSON(path+"/translate.json", (data) => {
+            $.getJSON(path+"/translation.json", (data) => {
                 Object.assign($.dict, data);
             
                 $(document).trigger("ZIOM-modelInit", [this.config.name, this.config.color]);

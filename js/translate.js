@@ -1,26 +1,5 @@
 (function ( $ ) {
-    $.dict = {
-        "reset": {
-            "en":"Reset",
-            "cs":"Resetovat"
-        },
-        "display": {
-            "en":"Display",
-            "cs":"Zobrazení"
-        },
-        "navigation": {
-            "en":"Navigation",
-            "cs":"Navigace"
-        },
-        "labels":{
-            "en":"Lables",
-            "cs":"Popisky"
-        },
-        "highlight":{
-            "en":"Highlight",
-            "cs":"Zvýraznění"
-        }
-    };
+    $.dict = {};
     
     $.lang = window.navigator.language || window.navigator.userLanguage || undefined;
     
