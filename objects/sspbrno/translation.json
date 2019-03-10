@@ -31,6 +31,10 @@
         "en": "Library",
         "cs": "Knihovna"
     },
+    "directorate":{
+        "en": "Directorate",
+        "cs": "Ředitelství"
+    },
     "0floor":{
         "en": "0th floor",
         "cs": "0. Patro"

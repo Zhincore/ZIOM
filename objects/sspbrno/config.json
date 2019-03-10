@@ -34,6 +34,10 @@
         "waypoint-14": {
             "name":"library",
             "color":"#ff0000"
+        },
+        "waypoint-16": {
+            "name":"directorate",
+            "color":"#ffda00"
         }
     },
     "floors": {
