@@ -42,6 +42,10 @@
         "waypoint-17": {
             "name":"siphon",
             "color":"#138892"
+        },
+        "waypoint-18": {
+            "name":"e-stairway",
+            "color":"#523016"
         }
     },
     "floors": {

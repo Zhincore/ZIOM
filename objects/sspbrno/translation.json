@@ -35,6 +35,10 @@
         "en": "Directorate",
         "cs": "Ředitelství"
     },
+    "e-stairway":{
+        "en": "Emergency/Secondary stairway",
+        "cs": "Nouzové/Sekundární schodiště"
+    },
     "0floor":{
         "en": "0th floor",
         "cs": "0. Patro"
