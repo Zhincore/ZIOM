@@ -38,6 +38,10 @@
         "waypoint-16": {
             "name":"directorate",
             "color":"#ffda00"
+        },
+        "waypoint-17": {
+            "name":"siphon",
+            "color":"#138892"
         }
     },
     "floors": {
