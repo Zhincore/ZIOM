@@ -46,6 +46,7 @@ const Model = {
                     obj.material.flatShading = true;
                     obj.material.opacity = 0.3;
                     obj.material.transparent = true;
+                    obj.material.depthTest = false;
                     
                     this.waypoints.push(obj);
                     
@@ -55,7 +56,6 @@ const Model = {
                 }else{
                     obj.material.opacity = 0.95;
                     obj.material.transparent = true;
-                    obj.renderOrder = 0;
                 }
                 
             });
