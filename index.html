@@ -9,8 +9,10 @@
     </head>
     <body>
     
-    <div id="overlay">
+    <div id="overlay"> 
+    
         <div id="alerts"></div>
+        
         
         <div id="initScreen" class="fulllay">
             <noscript>
@@ -24,7 +26,7 @@ CZ: Máte vypnutý Javascript.
             <img id="logo" src="images/ZIOM.png" style="display: none">
             
             <div id="loadingBar-wrap" style="display: none;">
-                Loading...
+                <span id="loading-trn" data-trn="loading">Loading</span>...
                 <div class="text"></div>
                 <div id="loadingBar">
                     <div id="loadingBar-progress" style="width: 0%;">0%</div>
@@ -32,40 +34,78 @@ CZ: Máte vypnutý Javascript.
             </div>
         </div>
         
+        
         <div id="controls" class="runtimeui" style="display: none">
-            <div id="nav">
-            
-                <button class="menu-item dropdown-toggle down"  data-toggle="#nav-colap"><span class="trn" data-trn="navigation">Navigace</span></button>
+            <div id="c-top">
+                <div id="hud" class="runtimeui" style="display: none">
                 
-                <div id="nav-colap" class="collapsible" style="top: 0">
-                    <ul class="menu">
-                        <li><div class="menu-item" style="border-left: 0">
-                            <form id="langSelect-form">
-                                <i class="fas fa-language fa-lg"></i>
-                                <select id="langSelect">
-                                    <option value="en">English</option>
-                                    <option value="cs">Česky</option>
-                                </select> 
-                            </form>
-                        </div></li>
+                    <div id="run-logo">
+                        <!--<img src="images/ZIOM.png">-->
+                        <h1>ZIOM</h1>
+                        <span>&#8212;</span>
+                        <p class="trn" data-trn="ziom-">Zhincore's Interactive Object Map</p>
+                    </div>
+                    
+                    <div id="tip-controls" class="tip-box mobile-none">
+                        <h3 class="trn dropdown-toggle" data-toggle="#tip-controls-wrap" data-trn="hint-control">controls</h3>
                         
-                        <li><button class="menu-item trn nav-item" style="" data-name="reset" data-trn="reset">reset</button></li>
-                    </ul>
+                        <div id="tip-controls-wrap" class="tip-content collapsible hidden">
+                            <p><i class="fas fa-globe"></i> <span class="trn" data-trn="rotate-around">rotate around</span></p>
+                            <p><i class="fas fa-arrows-alt"></i> <span class="trn" data-trn="move-around">move around</span></p>
+                            <p><i class="fas fa-search"></i> <span class="trn" data-trn="mouse-zoom">mouse zoom</span></p>
+                        </div>
+                    </div>
+                    
+                </div>  
+                
+                <div id="nav">
+                    <button class="menu-item dropdown-toggle down trn" data-trn="navigation" data-toggle="#nav-colap">Navigace</button>
+                    
+                    <div id="nav-colap" class="collapsible" style="top: 0">
+                        <ul class="menu">
+                            <li><div class="menu-item" style="border-left: 0">
+                                <form id="langSelect-form">
+                                    <i class="fas fa-language fa-lg"></i>
+                                    <select id="langSelect">
+                                        <option value="en">English</option>
+                                        <option value="cs">Česky</option>
+                                    </select> 
+                                </form>
+                            </div></li>
+                            
+                            <li><button class="menu-item trn nav-item" style="" data-name="reset" data-trn="reset">reset</button></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             
-            <div id="options">
-                <div id="options-colap" class="collapsible hidden" style="bottom: 0">
-                    <ul class="menu">
-                        <form id="options-form">
-                        </form>
-                    </ul>
+            <div id="c-bottom">
+                <div id="options">
+                    <div id="options-colap" class="collapsible hidden" style="bottom: 0">
+                        <ul class="menu">
+                            <form id="options-form">
+                                <li>
+                                    <div>
+                                        <button class="menu-item trn dropdown-toggle down" style="border-color: #000000" data-trn="advanced" data-toggle="#opt-advanced-colap">advanced</button>
+                                        <div id="opt-advanced-colap" class="collapsible hidden">
+                                            <ul id="#opt-advanced" class="menu dropdown-menu">
+                                                <li><div class="menu-item" style="border-color: #0000aa">
+                                                    <input type="checkbox" name="metrics" id="o-metrics"> <label for="o-metrics" class="trn" data-trn="metrics">metrics</label>
+                                                </div></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            </form>
+                        </ul>
+                    </div>
+                    
+                    <button class="menu-item dropdown-toggle up trn" data-trn="display" data-toggle="#options-colap">display</button>
+                    
                 </div>
-                
-                <button class="menu-item dropdown-toggle up" data-toggle="#options-colap"><span class="trn" data-trn="display">display</span></button>
-                
             </div>
         </div>
+                
         
         <div id="stats" class="runtimeui" style="display: none"></div>
     </div>
@@ -85,6 +125,7 @@ CZ: Máte vypnutý Javascript.
     <script>
         $(window).one("load", () => {
             $("#logo").delay(100).fadeIn("fast", () => {
+                $("#loading-trn").translate();
                 try{
                 
                     App.init();
@@ -99,7 +140,7 @@ CZ: Máte vypnutý Javascript.
         });
         
         function contextLost(){
-            $("#alerts").append($("#TEMPLATES > .alert-error").clone().attr("id", "contextlost").hide().text("WebGL context lost! Maybe insufficent RAM?").delay(1).slideDown());
+            $("#alerts").append($("#TEMPLATES > .alert-error").clone().attr("id", "contextlost").hide().attr("data-trn", "contextLost").text("WebGL context lost! Maybe insufficent RAM?").translate().delay(1).slideDown());
         }
         function contextRestored(){
             $("#contextlost").slideUp().remove();

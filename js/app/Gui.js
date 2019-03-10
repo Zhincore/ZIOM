@@ -47,8 +47,7 @@ const Gui = {
     },
     
     prepareOptions: function(){
-        $("#options-form").append($.parseHTML(config2menu(App.model.config.floors, this.optTemplate)));
-        $("#options-form").append($.parseHTML(config2menu({
+        $("#options-form").prepend($.parseHTML(config2menu({
             "labels":{
                 "name":"labels",
                 "color": "#ff0000"
@@ -63,6 +62,7 @@ const Gui = {
                 "unchecked": true
             }
         }, this.optTemplate)));
+        $("#options-form").prepend($.parseHTML(config2menu(App.model.config.floors, this.optTemplate)));
         
         $("#options-form").on('change input', function() {
             let data = $(this).serializeArray()
@@ -88,9 +88,10 @@ const Gui = {
     
     //
     dropdownToggle: function(ev){
+        ev.preventDefault();
         let target = $($(ev.target).attr("data-toggle"));
 
-        target.finish().slideToggle();
+        target.finish().slideToggle("fast");
     },
     
     //
@@ -114,6 +115,14 @@ const Gui = {
                 
             }else if(key === "autoRotate"){
                 App.controls.autoRotate = data[key];
+                
+            }else if(key === "metrics"){
+                if(data[key]){
+                    $("#stats").show();
+                }else{
+                    $("#stats").hide();
+                }
+                
             }
         }
     },

@@ -110,6 +110,7 @@ const App = {
             this.controls.maxDistance = 50;
             this.controls.enableKeys = false;
             this.controls.autoRotate = false;
+            this.controls.autoRotateSpeed = 1.5;
             
             this.camera.position.set(0, 2, 15);
             this.controls.update();
@@ -191,8 +192,8 @@ const App = {
     //
     registerListeners: function(){       
         $(window).resize((this.onResize).bind(this)); 
-        $(document).mousemove((this.onMouseMove).bind(this));
-        $(document).on("draglessClick", (this.onDraglessClick).bind(this));
+        $(this.canvas).mousemove((this.onMouseMove).bind(this));
+        $(this.canvas).on("draglessClick", (this.onDraglessClick).bind(this));
         
         this.renderer.context.canvas.addEventListener("webglcontextlost", function(event) {
             event.preventDefault();

@@ -1,4 +1,40 @@
 {
+    "ziom-":{
+        "en":"Zhincore's Interactive Object Map",
+        "cs":"Zhincorova Interaktivní Mapa Objektu"
+    },
+    "hint-control":{
+        "en":"Controls",
+        "cs":"Ovládání"
+    },
+    "rotate-around":{
+        "en":"Left mouse-button rotates the view",
+        "cs":"Levé tlačítko myši otáčí pohled"
+    },
+    "move-around":{
+        "en":"Right mouse-button moves the view",
+        "cs":"Pravé tlačítko myši posunuje pohled"
+    },
+    "mouse-zoom":{
+        "en":"Middle mouse-button zooms the view",
+        "cs":"Prostřední tlačítko myši přibližuje pohled"
+    },
+    "contextLost":{
+        "en": "WebGL context lost! Maybe insufficent RAM?",
+        "cs": "WebGL context ztracen! Možná nedostatečná RAM?"
+    },
+    "loading":{
+        "en":"Loading",
+        "cs":"Načítání"
+    },
+    "advanced":{
+        "en":"Advanced",
+        "cs":"Pokročilé"
+    },
+    "metrics":{
+        "en":"Performance monitor",
+        "cs":"Sledování výkonu"
+    },
     "reset": {
         "en":"Reset",
         "cs":"Resetovat"
