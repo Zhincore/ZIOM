@@ -43,6 +43,10 @@
         "en":"Performance monitor",
         "cs":"Sledování výkonu"
     },
+    "AA":{
+        "en":"Anti-aliasing",
+        "cs":"Vyhlazování hran"
+    },
     "reset": {
         "en":"Reset",
         "cs":"Resetovat"

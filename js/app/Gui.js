@@ -130,6 +130,9 @@ const Gui = {
                     $("#stats").hide();
                 }
                 
+            }else if(key === "AA"){
+                App.renderPass.renderToScreen = !data[key];
+                App.effectFXAA.enabled = data[key];   
             }
         }
     },

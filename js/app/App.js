@@ -139,7 +139,9 @@ const App = {
             // Add postprocessing           
             this.renderTarget = new THREE.WebGLRenderTarget( window.innerWidth, window.innerHeight );
             this.composer = new THREE.EffectComposer( this.renderer );
-            this.composer.addPass( new THREE.RenderPass(this.scene, this.camera) );
+            
+            this.renderPass = new THREE.RenderPass(this.scene, this.camera);
+            this.composer.addPass( this.renderPass );
             
             
             /// FXAA
