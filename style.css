@@ -239,12 +239,13 @@ body{
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    overflow-x: auto;
+    overflow: visible auto;
     max-height: calc(100vh - 140px);
 }
 
 .menu-item{
     padding: 8px 16px;
+    width: 100%;
     margin: 2px;
     background-color: var(--gui-bg);
     display: block;
@@ -261,6 +262,7 @@ body{
 .dropdown-menu{
     padding: 0;
     padding-left: 16px;
+    overflow: hidden;
 }
 
 #c-top, #c-bottom{
