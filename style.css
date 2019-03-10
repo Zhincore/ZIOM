@@ -1,6 +1,7 @@
 :root{
     --label-bg: rgba(255, 255, 255, .25);
     --gui-bg: rgba(255, 255, 255, 0.75);
+    --model-color: gray;
 }
 
 *{
@@ -27,6 +28,57 @@ body{
 }
 
 /**************/
+
+.custom-select{
+    display: inline-block;
+    border-bottom: 2px solid black;
+    position: relative;
+}
+
+.custom-select select{
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari and Chrome */
+    border: none;
+    background: none;
+    color: black;
+    padding: 2px;
+    z-index: 1;
+}
+
+.custom-select select option{
+    padding: 12px;
+}
+
+.custom-select::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: gray;
+    opacity: .35;
+    z-index: -1;
+}
+
+.custom-select::after{
+     font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f0d7";
+     color: black;
+     padding: 2px;
+     margin-left: -16px;
+     pointer-events: none;
+}
+
+
+.column,.row{
+    display: flex;
+    flex-flow: column wrap;
+    align-items: flex-start;
+}
+.row{
+    flex-direction: row;
+}
+
 
 .fulllay{
     position: absolute;
@@ -89,6 +141,7 @@ body{
 
 #initScreen{
     background-color: white;
+    z-index: 9999999;
 }
 
 #logo{
@@ -140,7 +193,7 @@ body{
 }
 
 .dropdown-toggle.up::after{
-    font-family: "Font Awesome 5 Free"; font-weight: 900; content: " \f0d8";
+    content: " \f0d8";
 }
 
 .collapsible{
@@ -206,7 +259,7 @@ body{
     bottom: 0;
 }
 
-.tip-box,.menu,#run-logo,#nav,#options{
+#hud,#nav,#options{
     pointer-events: auto;
 }
 
@@ -226,12 +279,31 @@ body{
 
 /****/
 
+#hud{
+    background-color: var(--gui-bg);
+}
+
+#objSelection-form{
+    margin-left: 32px;
+    padding: 16px 6px;
+}
+
+#objSelection-wrap::before{
+    background-color: var(--model-color);
+}
+
+.model-logo{
+    height: 26px;
+    width: auto;
+    margin: 8px;
+}
+
 #run-logo{
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     padding: 8px 16px;
-    background-color: var(--gui-bg);
+    border-bottom: 1px solid gray;
 }
 
 #run-logo img{
@@ -239,8 +311,13 @@ body{
 }
 
 .tip-box{
-    padding: 18px;
-    background-color: var(--gui-bg);
+    padding: 6px 18px;
+    color: #3f3f3f;
+}
+
+.tip-box h3{
+    opacity: .75;
+    width: 100%;
 }
 
 .tip-content{

@@ -43,6 +43,7 @@ const Gui = {
         });
         
         $(".dropdown-toggle").click(this.dropdownToggle);
+        $(".custom-select").click(this.customSelect);
 
     },
     
@@ -86,6 +87,7 @@ const Gui = {
         });
     },
     
+    
     //
     dropdownToggle: function(ev){
         ev.preventDefault();
@@ -93,6 +95,11 @@ const Gui = {
 
         target.finish().slideToggle("fast");
     },
+    
+    customSelect: function(ev){
+        $("select option", ev.target).trigger("click");
+    },
+    
     
     //
     updateConfig: function(data){

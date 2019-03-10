@@ -37,23 +37,38 @@ CZ: Máte vypnutý Javascript.
         
         <div id="controls" class="runtimeui" style="display: none">
             <div id="c-top">
-                <div id="hud" class="runtimeui" style="display: none">
+                <div id="hud" class="runtimeui row" style="display: none">
                 
-                    <div id="run-logo">
-                        <!--<img src="images/ZIOM.png">-->
-                        <h1>ZIOM</h1>
-                        <span>&#8212;</span>
-                        <p class="trn" data-trn="ziom-">Zhincore's Interactive Object Map</p>
+                    <div class="column">
+                        <div id="run-logo">
+                            <!--<img src="images/ZIOM.png">-->
+                            <h1>ZIOM</h1>
+                            <span>&#8212;</span>
+                            <p class="trn" data-trn="ziom-">Zhincore's Interactive Object Map</p>
+                        </div>
+                        
+                        <div id="tip-controls" class="tip-box mobile-none">
+                            <h3 class="trn dropdown-toggle" data-toggle="#tip-controls-wrap" data-trn="hint-control">controls</h3>
+                            
+                            <div id="tip-controls-wrap" class="tip-content collapsible hidden">
+                                <p><i class="fas fa-globe"></i> <span class="trn" data-trn="rotate-around">rotate around</span></p>
+                                <p><i class="fas fa-arrows-alt"></i> <span class="trn" data-trn="move-around">move around</span></p>
+                                <p><i class="fas fa-search"></i> <span class="trn" data-trn="mouse-zoom">mouse zoom</span></p>
+                                <p><i class="fas fa-cube"></i> <span class="trn" data-trn="click-obj">click obj</span></p>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div id="tip-controls" class="tip-box mobile-none">
-                        <h3 class="trn dropdown-toggle" data-toggle="#tip-controls-wrap" data-trn="hint-control">controls</h3>
-                        
-                        <div id="tip-controls-wrap" class="tip-content collapsible hidden">
-                            <p><i class="fas fa-globe"></i> <span class="trn" data-trn="rotate-around">rotate around</span></p>
-                            <p><i class="fas fa-arrows-alt"></i> <span class="trn" data-trn="move-around">move around</span></p>
-                            <p><i class="fas fa-search"></i> <span class="trn" data-trn="mouse-zoom">mouse zoom</span></p>
-                        </div>
+                    <div class="column">
+                        <form id="objSelection-form">
+                            <label for="objSelection"><span class="trn" data-trn="selected-obj">selected obj</span>: </label>
+                            <div class="row" style="align-items: center">
+                                <img src="images/empty.png" class="model-logo">
+                                <div id="objSelection-wrap" class="custom-select"><select id="objSelection">
+                                    <option value="sspbrno">SSPBrno</option>
+                                </select></div>
+                            </div>
+                        </form>
                     </div>
                     
                 </div>  
@@ -180,6 +195,13 @@ CZ: Máte vypnutý Javascript.
         
         $(document).one("ZIOM-modelInit", (ev, name, color) => {
             console.log("Loading "+name);
+            
+            $("#objSelection-wrap").css("borderColor", App.model.config.color);
+            $("body").get(0).style.setProperty("--model-color", App.model.config.color);
+            if(App.model.config.logo){
+                $(".model-logo").attr("src", App.model.path+App.model.config.logo);
+            }
+            
             $("#loadingBar-wrap .text").text("model");
 
             $("#loadingBar-progress").finish().width("100%").css("background-color", color).addClass("pulsing").text(name);

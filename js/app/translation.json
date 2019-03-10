@@ -19,6 +19,14 @@
         "en":"Middle mouse-button zooms the view",
         "cs":"Prostřední tlačítko myši přibližuje pohled"
     },
+    "click-obj":{
+        "en":"Highlight will be focused by clicking it",
+        "cs":"Zvýraznění se zaměří kliknutím"
+    },
+    "selected-obj":{
+        "en":"Currently selected object",
+        "cs":"Aktuálně vybraný objekt"
+    },
     "contextLost":{
         "en": "WebGL context lost! Maybe insufficent RAM?",
         "cs": "WebGL context ztracen! Možná nedostatečná RAM?"

@@ -1,6 +1,7 @@
 {
     "name": "sspbrno",
     "color": "#14a25f",
+    "logo":"/spesit.png",
     "waypoints": {
         "waypoint-1": {
             "name":"gym",

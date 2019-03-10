@@ -4,7 +4,7 @@ const App = {
     //
     bgColor: new THREE.Color(0xeaeaea),
     cameraSpeed: 500,
-    models: "maps/",
+    models: "objects/",
     libs: [
         "js/modules/libs/stats.min.js",
         "js/modules/loaders/GLTFLoader.js",
