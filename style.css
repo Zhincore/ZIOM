@@ -145,7 +145,7 @@ body{
     display: flex;
     justify-content: center;
     flex-direction: column;
-    z-index: 1003;
+    z-index: 2003;
 }
 
 .alert{
