@@ -8,11 +8,11 @@
         "cs": "Hala"
     },
     "eatery":{
-        "en": "Eatery",
+        "en": "Canteen",
         "cs": "Jídelna"
     },
     "canteen":{
-        "en": "Canteen",
+        "en": "Buffet",
         "cs": "Kantýna"
     },
     "study":{
