@@ -39,6 +39,10 @@
         "en": "Secondary stairway",
         "cs": "Sekundární schodiště"
     },
+    "2-stairway":{
+        "en": "Small stairway",
+        "cs": "Malé schodiště"
+    },
     "0floor":{
         "en": "0th floor",
         "cs": "0. Patro"

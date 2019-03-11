@@ -46,6 +46,10 @@
         "waypoint-18": {
             "name":"e-stairway",
             "color":"#523016"
+        },
+        "waypoint-19": {
+            "name":"2-stairway",
+            "color":"#87a800"
         }
     },
     "floors": {
