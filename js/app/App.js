@@ -427,7 +427,7 @@ const App = {
         obj.userData.style = {color: "#"+obj.material.color.getHexString()};
         
         if(!highlight){
-            $(obj.userData).stop().animate({
+            $(obj.userData).finish().animate({
                 color: obj.origColor
             }, {step: ()=>{
                 obj.material.color.set(obj.userData.style.color);
@@ -435,7 +435,7 @@ const App = {
             
         }else{
             // set a new color for closest object
-            $(obj.userData).stop().animate({
+            $(obj.userData).finish().animate({
                 color: "#5577FF"
             }, {step: ()=>{
                 obj.material.color.set(obj.userData.style.color);

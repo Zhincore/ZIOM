@@ -80,9 +80,10 @@ const Gui = {
             
             Gui.updateConfig(data);
         }).trigger('change');
+        
         $(".cfloor").hover((ev) => {
             App.highlightFloor(App.scene.getObjectByName($(ev.target).attr("data-name")), true);
-        },(ev) => {
+        }, (ev) => {
             App.highlightFloor(App.scene.getObjectByName($(ev.target).attr("data-name")));
         });
     },
@@ -91,6 +92,11 @@ const Gui = {
     //
     dropdownToggle: function(ev){
         ev.preventDefault();
+        
+        if($.browser.mobile && $(ev.target).is(".primary-dropdown-toggle")){
+            $(".primary-dropdown").not($(".primary-dropdown", ev.target)).finish().slideUp("fast");
+        }
+        
         let target = $($(ev.target).attr("data-toggle"));
 
         target.finish().slideToggle("fast");
